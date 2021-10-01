@@ -92,5 +92,30 @@ def cloud_fn_my_cloud_function(event, context):
             }],
         }
         print("Continue coding to deploy the server")
+
+        from pprint import pprint
+
+        from googleapiclient import discovery
+        from oauth2client.client import GoogleCredentials
+
+        credentials = GoogleCredentials.get_application_default()
+
+        service = discovery.build('compute', 'v1', credentials=credentials)
+
+        # Project ID for this request.
+        project = 'planar-courage-326117'  # TODO: Update placeholder value.
+
+        # The name of the zone for this request.
+        zone = 'my-zone'  # TODO: Update placeholder value.
+
+        instance_body = {
+            # TODO: Add desired entries to the request body.
+        }
+
+        request = service.instances().insert(project=project, zone=zone, body=instance_body)
+        response = request.execute()
+
+        # TODO: Change code below to process the `response` dict:
+        pprint(response)
     elif action == "bucket":
         create_bucket_class_location("my_bucket")
