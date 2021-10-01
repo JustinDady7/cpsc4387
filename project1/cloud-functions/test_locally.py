@@ -1,4 +1,4 @@
-from main import cloud_fn_stop_all_servers, cloud_fn_your_cloud_function
+from main import cloud_fn_stop_all_servers, cloud_fn_my_cloud_function
 
 
 def test_locally():
@@ -8,7 +8,7 @@ def test_locally():
             'action': "build"
         }
     }
-    cloud_fn_your_cloud_function(local_event, None)
+    cloud_fn_my_cloud_function(local_event, None)
 
 
 if __name__ == '__main__':
