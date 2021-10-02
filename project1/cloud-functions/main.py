@@ -1,25 +1,6 @@
 import uuid
 import googleapiclient.discovery
 from google.cloud import runtimeconfig
-from google.cloud import storage
-
-
-def create_bucket_class_location(bucket_name):
-    """Create a new bucket in specific location with storage class"""
-    # bucket_name = "your-new-bucket-name"
-
-    storage_client = storage.Client()
-
-    bucket = storage_client.bucket(bucket_name)
-    bucket.storage_class = "COLDLINE"
-    new_bucket = storage_client.create_bucket(bucket, location="us")
-
-    print(
-        "Created bucket {} in {} with storage class {}".format(
-            new_bucket.name, new_bucket.location, new_bucket.storage_class
-        )
-    )
-    return new_bucket
 
 
 def cloud_fn_stop_all_servers(event, context):
@@ -64,7 +45,7 @@ def cloud_fn_my_cloud_function(event, context):
 
     if action == "build":
         runtimeconfig_client = runtimeconfig.Client()
-        myconfig = runtimeconfig_client.config('cybergym')
+        myconfig = runtimeconfig_client.config('myconfig')
         project = myconfig.get_variable('project').value.decode("utf-8")
         zone = myconfig.get_variable('zone').value.decode("utf-8")
 
@@ -91,8 +72,6 @@ def cloud_fn_my_cloud_function(event, context):
                 ]
             }],
         }
-        print("Continue coding to deploy the server")
-
         from pprint import pprint
 
         from googleapiclient import discovery
@@ -106,7 +85,6 @@ def cloud_fn_my_cloud_function(event, context):
         project = 'planar-courage-326117'  # TODO: Update placeholder value.
 
         # The name of the zone for this request.
-        zone = 'my-zone'  # TODO: Update placeholder value.
 
         instance_body = {
             # TODO: Add desired entries to the request body.
@@ -117,5 +95,20 @@ def cloud_fn_my_cloud_function(event, context):
 
         # TODO: Change code below to process the `response` dict:
         pprint(response)
+        return
+
     elif action == "bucket":
-        create_bucket_class_location("my_bucket")
+        from google.cloud import storage
+
+        storage_client = storage.Client()
+        bucket = storage_client.bucket("my_bucket")
+        bucket.storage_class = "COLDLINE"
+        new_bucket = storage_client.create_bucket(bucket, location="us")
+
+        print(
+            "Created bucket {} in {} with storage class {}".format(
+                new_bucket.name, new_bucket.location, new_bucket.storage_class
+            )
+        )
+        return new_bucket
+
