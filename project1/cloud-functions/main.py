@@ -49,7 +49,7 @@ def cloud_fn_my_cloud_function(event, context):
         project = myconfig.get_variable('project').value.decode("utf-8")
         zone = myconfig.get_variable('zone').value.decode("utf-8")
 
-        server_name = f"auto_server-{uuid.uuid4()}"
+        server_name = "my_server"
         compute = googleapiclient.discovery.build('compute', 'v1')
         image_response = compute.images().getFromFamily(project="debian-cloud", family="debian-9").execute()
         source_disk_image = image_response["selfLink"]
@@ -79,7 +79,7 @@ def cloud_fn_my_cloud_function(event, context):
 
         credentials = GoogleCredentials.get_application_default()
 
-        service = discovery.build('compute', 'v1', credentials=credentials)
+        #service = discovery.build('compute', 'v1', credentials=credentials)
 
         # Project ID for this request.
         project = 'planar-courage-326117'  # TODO: Update placeholder value.
@@ -90,12 +90,11 @@ def cloud_fn_my_cloud_function(event, context):
             # TODO: Add desired entries to the request body.
         }
 
-        request = service.instances().insert(project=project, zone=zone, body=instance_body)
+        request = compute.instances().insert(project=project, zone=zone, body=instance_body)
         response = request.execute()
 
         # TODO: Change code below to process the `response` dict:
-        pprint(response)
-        return
+        return response
 
     elif action == "bucket":
         from google.cloud import storage
