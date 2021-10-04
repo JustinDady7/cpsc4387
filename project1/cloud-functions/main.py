@@ -1,6 +1,9 @@
 import uuid
 import googleapiclient.discovery
 from google.cloud import runtimeconfig
+from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
+from google.cloud import storage
 
 
 def cloud_fn_stop_all_servers(event, context):
@@ -72,33 +75,13 @@ def cloud_fn_my_cloud_function(event, context):
                 ]
             }],
         }
-        from pprint import pprint
 
-        from googleapiclient import discovery
-        from oauth2client.client import GoogleCredentials
-
-        credentials = GoogleCredentials.get_application_default()
-
-        #service = discovery.build('compute', 'v1', credentials=credentials)
-
-        # Project ID for this request.
-        project = 'planar-courage-326117'  # TODO: Update placeholder value.
-
-        # The name of the zone for this request.
-
-        instance_body = {
-            # TODO: Add desired entries to the request body.
-        }
-
-        request = compute.instances().insert(project=project, zone=zone, body=instance_body)
+        request = compute.instances().insert(project=project, zone=zone, body=config)
         response = request.execute()
 
-        # TODO: Change code below to process the `response` dict:
         return response
 
     elif action == "bucket":
-        from google.cloud import storage
-
         storage_client = storage.Client()
         bucket = storage_client.bucket("my_bucket")
         bucket.storage_class = "COLDLINE"
